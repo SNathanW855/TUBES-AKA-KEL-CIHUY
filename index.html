@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Analisis Trending Kata</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=5">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<div class="container">
+    <h1>📊 Analisis Trending Kata</h1>
+    <p class="subtitle">Perbandingan Algoritma Iteratif dan Rekursif</p>
+
+    <div class="cards">
+        <div class="card">
+            <h2>🔁 Iteratif</h2>
+            <ul>
+                {% for w, c in iteratif %}
+                <li>{{ w }} : {{ c }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>🔂 Rekursif</h2>
+            <ul>
+                {% for w, c in rekursif %}
+                <li>{{ w }} : {{ c }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <h2 class="chart-title">📈 Grafik Running Time</h2>
+    <canvas id="lineChart"></canvas>
+</div>
+
+<script>
+const labels = {{ loop_values | safe }};
+const iterData = {{ iter_times | safe }};
+const recData = {{ rec_times | safe }};
+
+new Chart(document.getElementById('lineChart'), {
+    type: 'line',
+    data: {
+        labels: labels,
+        datasets: [
+            {
+                label: 'Iteratif',
+                data: iterData,
+                borderWidth: 3,
+                tension: 0.3
+            },
+            {
+                label: 'Rekursif',
+                data: recData,
+                borderWidth: 3,
+                tension: 0.3
+            }
+        ]
+    },
+    options: {
+        responsive: true,
+        scales: {
+            x: { title: { display: true, text: 'Jumlah Iterasi' } },
+            y: { title: { display: true, text: 'Running Time (ms)' } }
+        }
+    }
+});
+</script>
+
+</body>
+</html>
